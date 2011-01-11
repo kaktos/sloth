@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+      <meta charset="utf-8"/>
+      <title><%= @title || AppSettings.title %></title>
+      <link rel="stylesheet" media="all" href="/stylesheets/defaults.css"/>
+      <link href="/feed" rel="alternate" title="Blog Feed" type="application/atom+xml" />
+  <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->      
+      <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+      <script type="text/javascript" src="/javascripts/application.js"></script>
+      <%= yield_content :head %>
+  </head>
+
+  <body class="<%= yield_content(:page_type) || "public" %>">
+    <section class="<%= yield_content(:page_type) || "public" %>">
+      <header class="blog-header">
+        <hgroup>
+          <h1><a href="/"><%= AppSettings.title %></a></h1>
+          <h2><%= AppSettings.sub_title %></h2>        
+        </hgroup>
+        <nav id="user-nav">
+          <ul id="nav-menu">
+             <li><a class="home" href="/" alt="Home Page"></a></li>
+             <li><a class="feed" href="/feed" alt="RSS Feed"></a></li>           
+          </ul> 
+        </nav>  
+      </header>
+      
+
+      <section id="content">
+      <%= yield %>
+      </section>
+    
+    
+      <footer>
+        <ul class="foot-menu">
+          <li class="about-me">Design & Content by <a href="/login"><em><%= AppSettings.author %></em></a></li>
+          <%(AppSettings.social_links ||[]).each do |k, v|%>
+            <li><a class="social" href="<%=v%>"><%=k%></a></li>
+          <% end %>
+          <% if admin? %>      
+          <li><a class="admin post-new" href="/posts/new" alt="Post new Article">Post New</a></li> 
+          <li><a class="admin post-new" href="/posts/draft" alt="Drafts">Drafts (<%=Post.draft_count%>)</a></li>    
+          <% end %>
+        </ul>  
+      </footer>
+
+  </section>
+
+</body>
+
+</html>

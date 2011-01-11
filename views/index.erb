@@ -1,0 +1,28 @@
+
+<% if @posts.blank? %>
+  <h1>There isn't any posts yet!</h1>
+<% else %>
+  <% @posts.each do |post| %>
+    <article>
+        <h2><a class="article-title" href="<%= post.url%>"><%= post.title %></a></h2>
+        
+        <ul class="meta">
+          <li class="post-time"><time datetime="<%= post.created_at.strftime("%Y-%m-%d")%>"><%= post.created_at.strftime("%B %d, %Y")%></time></li>
+          <li class="post-tags">tags: <%= tag_links(post) %></li>
+          <% if admin? %>          
+          <li>
+            <a class="admin edit-post" href="/posts/<%=post.id%>/edit">Edit</a>
+            <a class="admin del-post" href="/posts/<%=post.id%>" data-method="delete" data-confirm="are you sure?">Delete</a>
+          </li>  
+          <% end %>                      
+        </ul>        
+        <section class="output-html">
+          <%= post.short_body %>
+          
+          <a href="<%= post.url %>">Continue reading &raquo;</a>
+          
+        </section>
+   
+    </article>
+  <% end %>
+<% end %>

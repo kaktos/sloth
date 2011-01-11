@@ -1,0 +1,10 @@
+<h2>Tagged With: <%=params[:tag]%></h2>
+<ul>
+<% @posts.each do |post|%>
+
+	<h2><a href="<%=post.url%>"><%=post.title%></a></h2>
+
+
+
+<% end %>
+ </ul>

@@ -1,0 +1,11 @@
+<% content_for :page_type, "private" %>
+
+<ul>
+<% @drafts.each do |draft|%>
+
+  	<h4><a href="/posts/<%=draft.id%>/edit"><%=draft.title%></a></h4>
+	
+ 
+
+<% end %>
+ </ul>

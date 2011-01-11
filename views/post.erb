@@ -1,0 +1,65 @@
+<% content_for :page_type, "private" %>
+
+<% content_for :head do %>
+<script type="text/javascript" src="/javascripts/showdown.js"></script>
+<script type="text/javascript" src="/javascripts/jquery.elastic.js"></script>
+<script type="text/javascript">
+    $(function(){
+      $("#input-body").keyup(function(){
+        converter = new Showdown.converter();
+        $(".output-html").html(converter.makeHtml($("#input-body").val()));
+      });
+      
+      $('#title').keyup(function(){$('.article-title').html($(this).val())});
+      
+      $('textarea#input-body').elastic();
+        
+    })
+
+</script>
+<% end %>
+
+ 
+ 
+
+<section id="edit-post">
+
+  <section id="preview">
+     <h3>Preview: ↓ </h3>
+     <article>
+       <h2><a class="article-title" href="#"><%= @post.title || ""%></a></h2>     
+       <ul class="meta">
+         <li class="post-time"><time datetime="<%= @post.created_at.strftime("%Y-%m-%d")%>"><%= @post.created_at.strftime("%B %d, %Y")%></time></li>
+         <li class="post-tags">tags:</li>
+        </ul>        
+       <section class="output-html"><%= @post.body_html%></section>     
+     </article> 
+  </section>
+
+
+  <section id="article-form">
+    <form action="<%=post_path(@post)%>" method="POST">
+      <% if @post.saved?%><input type="hidden" name="_method" value="put" /><% end %>
+      <% unless @post.errors.blank? %>     
+        <ul class="errors">
+        <% @post.errors.each do |e|%>
+          <li><%= e %></li>
+        <% end %>
+        </ul>
+      <% end %>  
+      <ul>
+        <li><input id="title" name="title" type="text" placeholder="Title" required value="<%= @post.title%>" /></li>      
+        <li><input id="slug" name="slug" type="text" placeholder="Slug: (could auto-generate by title)" value="<%= @post.slug%>" /></li>
+        <li><input id="tags" name="tags" type="text" placeholder="Tags: (separated by comma)" value="<%= (@post.tags || []).join(',')%>" /></li> 
+        <li><a href="http://kramdown.rubyforge.org/syntax.html" target='_blank'>Markdown Syntax<a><li>
+        <li><textarea id="input-body" name="body" placeholder="Content"><%= @post.body%></textarea></li>     
+        <li>
+          <%unless @post.published %><button type="submit" name="submit" value="draft">Save as Draft</button><% end %>
+          <button type="submit" name="submit" value="post">Post This</button>          
+        </li>
+      </ul> 
+    </form>
+  </section>
+
+
+</section>

@@ -1,0 +1,10 @@
+
+/settings.yml
+bin/
+.gems/
+WEB-INF/appengine-generated
+WEB-INF/lib
+WEB-INF/app.yaml
+WEB-INF/web.xml
+WEB-INF/appengine-web.xml
+

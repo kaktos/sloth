@@ -1,0 +1,3 @@
+application: slothtee
+version: 1
+runtime: jruby

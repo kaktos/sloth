@@ -1,0 +1,11 @@
+---
+admins: 
+  - yourname@gmail.com
+title: your blog title
+sub_title: your blog subtitle
+author: your name here
+base_url: http://xxx.appspot.com
+social_links:
+  facebook: http://www.facebook.com/<yourid>
+  twitter: http://twitter.com/<yourid>
+disqus_shortname:
