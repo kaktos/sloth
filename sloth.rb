@@ -55,7 +55,7 @@ helpers do
     (post.tags||[]).each do |tag|
       bf << "<a href='/tags/#{tag}'>#{tag}</a>"    
     end
-    bf.join(",")
+    bf.join(", ")
   end
 end
 

@@ -8,7 +8,10 @@
         
         <ul class="meta">
           <li class="post-time"><time datetime="<%= post.created_at.strftime("%Y-%m-%d")%>"><%= post.created_at.strftime("%B %d, %Y")%></time></li>
-          <li class="post-tags">tags: <%= tag_links(post) %></li>
+          <li class="post-tags">Tags: <%= tag_links(post) %></li>
+          <% unless AppSettings.disqus_shortname.blank? %>
+          <li class="post-comments"><a href="<%= post.url %>#disqus_thread" data-disqus-identifier="<%=post.id%>">Comments</a></li>
+          <% end %>
           <% if admin? %>          
           <li>
             <a class="admin edit-post" href="/posts/<%=post.id%>/edit">Edit</a>
@@ -17,12 +20,26 @@
           <% end %>                      
         </ul>        
         <section class="output-html">
-          <%= post.short_body %>
-          
-          <a href="<%= post.url %>">Continue reading &raquo;</a>
-          
-        </section>
-   
+          <%= post.short_body %>          
+          <a href="<%= post.url %>">Continue reading &raquo;</a>          
+        </section>   
     </article>
   <% end %>
+<% end %>
+
+
+<% unless AppSettings.disqus_shortname.blank? %>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = '<%=AppSettings.disqus_shortname%>'; 
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    })();
+
+</script>
 <% end %>

@@ -237,7 +237,10 @@ article {
     background:url('../images/tag_stroke_12x12.png') no-repeat scroll left center;
     padding:0 0 0 16px;  
   }
-  
+   article ul.meta li.post-comments {
+    background:url('../images/comment_alt1_stroke_12x12.png') no-repeat scroll left center;
+    padding:0 0 0 16px;  
+  } 
     article section.output-html p {
       margin:0 0 1.52em;
     }
