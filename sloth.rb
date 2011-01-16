@@ -67,7 +67,7 @@ get '/logout' do
 end
 
 get '/' do
-  @posts = Post.all(:published => true)
+  @posts = Post.all(:order => [:published_at.desc], :published => true)
   erb :index
 end
 
@@ -80,13 +80,13 @@ end
 
 
 get '/feed' do
-  posts = Post.all(:order => [:created_at.desc], :published => true, :limit => 25)
+  posts = Post.all(:order => [:published_at.desc], :published => true, :limit => 25)
   content_type 'application/atom+xml', :charset => 'utf-8'
   builder :feed, :locals => { :posts => posts }
 end
 
 get '/tags/:tag' do
-  @posts = Post.all(:order => [:created_at.desc], :published => true, :tags => params[:tag])
+  @posts = Post.all(:order => [:published_at.desc], :published => true, :tags => params[:tag])
   erb :tagged
 end
 

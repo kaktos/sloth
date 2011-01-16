@@ -5,14 +5,14 @@
     <!-- Used 4 times in query history -->
     <datastore-index kind="Post" ancestor="false" source="auto">
         <property name="published" direction="asc"/>
-        <property name="created_at" direction="desc"/>
+        <property name="published_at" direction="desc"/>
     </datastore-index>
 
     <!-- Used 1 time in query history -->
     <datastore-index kind="Post" ancestor="false" source="auto">
         <property name="published" direction="asc"/>
         <property name="tags" direction="asc"/>
-        <property name="created_at" direction="desc"/>
+        <property name="published_at" direction="desc"/>
     </datastore-index>
 
 </datastore-indexes>

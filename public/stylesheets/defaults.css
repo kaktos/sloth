@@ -5,64 +5,18 @@
    v2.0b1 | 201101
    NOTE:WORK IN PROGRESS
    USE WITH CAUTION AND TEST WITH ABANDON */
-
-html,body,div,span,applet,object,iframe,
-h1,h2,h3,h4,h5,h6,p,blockquote,pre,
-a,abbr,acronym,address,big,cite,code,
-del,dfn,em,img,ins,kbd,q,s,samp,
-small,strike,strong,sub,sup,tt,var,
-b,u,i,center,
-dl,dt,dd,ol,ul,li,
-fieldset,form,label,legend,
-table,caption,tbody,tfoot,thead,tr,th,td,
-article,aside,canvas,details,figcaption,figure,
-footer,header,hgroup,menu,nav,section,summary,
-time,mark,audio,video{
-  margin:0;
-  padding:0;
-  border:0;
-  outline:0;
-  font-size:100%;
-  font:inherit;
-  vertical-align:baseline;
-}
+   
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video { margin: 0; padding: 0; border: 0; outline: 0; font-size: 100%; font: inherit; vertical-align: baseline; }
 /* HTML5 display-role reset for older browsers */
-article,aside,details,figcaption,figure,
-footer,header,hgroup,menu,nav,section{
-  display:block;
-}
-body{
-  line-height:1;
-}
-ol,ul{
-  list-style:none;
-}
-blockquote,q{
-  quotes:none;
-}
-blockquote:before,blockquote:after,
-q:before,q:after{
-  content:'';
-  content:none;
-}
-/* remember to define visible focus styles!
-:focus{
-  outline:?????;
-} */
-
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block }
+body { line-height: 1 }
+ol, ul { list-style: none }
+blockquote, q { quotes: none }
+blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; }
 /* remember to highlight inserts somehow! */
-ins{
-  text-decoration:none;
-}
-del{
-  text-decoration:line-through;
-}
-
-table{
-  border-collapse:collapse;
-  border-spacing:0;
-}
-
+ins { text-decoration: none }
+del { text-decoration: line-through }
+table { border-collapse: collapse; border-spacing: 0; }
 
 
 /*------------------------------------*\
@@ -97,11 +51,6 @@ h4 {	font-size:1.452em;}
 h5 {	font-size:1.252em;} 
 h6 {	font-size:1.52em;}
 
-/* ** ** ul li's ** ** */
-ul li
-{
-	margin-left:20px;
-}
 
 /* ** ** custom select color ** ** */
 ::selection {
@@ -111,10 +60,6 @@ ul li
 	background: #525252; /* Firefox */
 	color:#fff;
 }
-/* ** ** paragraph styling ** ** */
-p {margin:0 0 1.52em;}
-	p img.left {float:left;margin:1.52em 1.52em 1.52em 0;padding:0;}
-	p img.right {float:right;margin:1.52em 0 1.52em 1.52em;}
 
 /* ** ** forms ** ** */
 form fieldset {-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius:5px; padding-top:5px; padding-left:5px; border:1px solid #ccc; }
@@ -129,18 +74,6 @@ form input[type=text], form input[type=email], form input[type=url], form input[
 		padding:4px 0 1px 5px;
 		}
 form label {display:block; height:20px; font-size:1.2em;}
-
-
-strong   		{	font-weight:600;}
-em, dfn  		{	font-style:italic;}
-dfn 	 		{   font-weight:600;}
-sup, sub 		{   line-height:0;}
-abbr, acronym   {	border-bottom:1px dashed #ccc;}
-address 		{	margin:0 0 1.5em;font-style:italic;}
-del 			{	color:#666;}
-pre, code, tt   {	font:1em 'andale mono', 'lucida console', monospace;line-height:1.5; display:block;}
-code 			{	background-color:#f8f8ff; display:block; padding:2px 2px 4px 26px; border:1px solid #dedede; line-height:1.67em;}
-pre 			{	margin:1.5em 0;white-space:pre;}
 
 
 button {
@@ -176,6 +109,12 @@ button:disabled {
 
 ul.errors {
   color: red;
+}
+
+.highlight {
+  background-color: #fef263;
+  font-weight: bold;
+  padding: 0 5px; 
 }
 
 /* ------------------------------------ */
@@ -298,11 +237,50 @@ article {
     background:url('../images/tag_stroke_12x12.png') no-repeat scroll left center;
     padding:0 0 0 16px;  
   }
-  article section.output-html ul{
-    list-style-type: disc;
-    margin: 0 0 1.52em;
-  }
   
+    article section.output-html p {
+      margin:0 0 1.52em;
+    }
+    article section.output-html strong   		{	font-weight:600;}
+    article section.output-html em, dfn  		{	font-style:italic;}
+    article section.output-html del 			  {	color:#666;}
+    article section.output-html pre, article section.output-html code, article section.output-html tt  
+                                            {	font:1em 'andale mono', 'lucida console', monospace;line-height:1.5; display:block;}
+    article section.output-html code 			  {	background-color:#f8f8ff; display:block; padding:2px 2px 4px 26px; border:1px solid #dedede; line-height:1.67em;}
+    article section.output-html pre 			  {	margin:1.5em 0;white-space:pre;}    
+    article section.output-html ul, article section.output-html ol{
+      list-style-type: disc;
+      margin: 0 0 1.52em 20px;
+    }
+    article section.output-html blockquote {
+      border-left:5px solid #ddd;
+      color:#555;
+      padding-left:0.6em;
+      margin:0 0 1em;
+    }    
+    article section.output-html dt {
+      font-weight:700;
+      margin-left:1em;
+    }    
+    article section.output-html dd {
+      margin-bottom:1em;
+      margin-left:2em;
+    }    
+    article section.output-html table {
+      width:100%;
+      margin:0 0 1em;
+    }
+    article section.output-html table th {
+      background:#eee;
+      border-bottom:1px solid #bbb;
+      padding:0.2em 1em;
+    }    
+    article section.output-html table td {
+      border-bottom:1px solid #ddd;
+      padding:0.2em 1em;
+    }
+    
+
 
 #edit-post {
   overflow: hidden;
@@ -376,8 +354,11 @@ footer {
     color: rgb(244, 244, 244);
     border-bottom: none;
   }
-  
+ 
+ 
+ 
 a.admin {
+  font-family: Verdana, sans-serif;
   font-size: 9px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
