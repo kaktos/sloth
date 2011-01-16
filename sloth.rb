@@ -3,6 +3,7 @@ require 'sinatra'
 require 'stringex'
 require 'yaml'
 require 'ostruct'
+require 'builder'
 require 'appengine-apis/users'
 require 'appengine-apis/logger'
 
@@ -23,6 +24,12 @@ configure :development do |cfg|
   #cfg.also_reload "lib/models.rb"
 end
 
+configure :production do
+  error do
+    "You have errors: \n" + request.env['sinatra.error'].message + "\n" + request.env['sinatra.error'].backtrace.join("\n")
+  end
+end
+
 
 # HELPERS --------------------------------------------------------------------------------------------------
 helpers do
@@ -32,7 +39,7 @@ helpers do
   
   def authenticate!
     redirect AppEngine::Users.create_login_url(request.url) unless AppEngine::Users.current_user
-    throw(:halt, [401, "Not authorized\n"]) unless AppSettings.admins.include?(AppEngine::Users.current_user.email)
+    halt(401, "Not authorized") unless AppSettings.admins.include?(AppEngine::Users.current_user.email)
   end
   
   def post_path(post)
@@ -53,9 +60,9 @@ helpers do
 end
 
 # FILTERS --------------------------------------------------------------------------------------------------
-before do
-  
-end
+#before do  
+#end
+
 
 # HANDLERS --------------------------------------------------------------------------------------------------
 get '/login' do
@@ -82,7 +89,7 @@ end
 get '/feed' do
   posts = Post.all(:order => [:published_at.desc], :published => true, :limit => 25)
   content_type 'application/atom+xml', :charset => 'utf-8'
-  builder :feed, :locals => { :posts => posts }
+  builder :feed, :locals => {:posts => posts, :xml => Builder::XmlMarkup.new }
 end
 
 get '/tags/:tag' do
