@@ -455,7 +455,18 @@ a.admin {
 }
 
 
+ul.pagination {
+  list-style: none;
+  font-weight: bold;
+  font-size: 1.2em;
+  padding: 5px 15px;
+}
 
-
+  ul.pagination li.left {
+    float: left;
+  }
+  ul.pagination li.right {
+    float: right;
+  }
 
 

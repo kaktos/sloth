@@ -62,7 +62,7 @@ click the name on page bottom to login, or directly open http://localhost:8080/l
 
 ##TODOs
 
-* pagination
+* <del>pagination</del>
 * tag count
 
 

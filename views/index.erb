@@ -25,6 +25,11 @@
         </section>   
     </article>
   <% end %>
+  
+  <ul class="pagination clearfix">
+    <li class="left"><% if @has_next_page%><a href="/?page=<%=(params[:page]||1).to_i+1%>"> &laquo; Older Posts</a><%end%></li>
+    <li class="right"><% if @has_previous_page%><a href="/?page=<%=(params[:page]||1).to_i-1%>">Newer Posts &raquo;</a><%end%></li>
+  </ul>
 <% end %>
 
 

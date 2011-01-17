@@ -10,8 +10,10 @@ require 'appengine-apis/logger'
 require 'lib/content_for'
 require 'lib/models'
 require 'lib/core_ext'
+require 'lib/paginator'
 
-
+PAGE_SIZE = 5
+PUBLIC_POSTS_MEM_KEY = 'PUBLIC_POSTS'
 
 # CONFIGURATIONS --------------------------------------------------------------------------------------------------
 configure do
@@ -74,7 +76,15 @@ get '/logout' do
 end
 
 get '/' do
-  @posts = Post.all(:order => [:published_at.desc], :published => true)
+  #@posts = Post.all(:order => [:published_at.desc], :published => true)
+  query = AppEngine::Datastore::Query.new('Post').filter('published', AppEngine::Datastore::Query::EQUAL, true)
+  query.sort :published_at, AppEngine::Datastore::Query::DESCENDING
+  page = params[:page] ? params[:page].to_i : 1
+  paginator = Paginator.new(query, PAGE_SIZE, PUBLIC_POSTS_MEM_KEY)
+  result = paginator.fetch_page(page)
+  @posts = Paginator.to_datamapper(result, Post)
+  @has_next_page = paginator.has_page?(page + 1)
+  @has_previous_page = (page > 1)
   erb :index
 end
 
