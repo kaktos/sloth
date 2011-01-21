@@ -1,43 +1,68 @@
 <% content_for :page_type, "private" %>
 
 <% content_for :head do %>
+<link rel="stylesheet" media="all" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.8/themes/base/jquery-ui.css"/>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.8/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/javascripts/showdown.js"></script>
 <script type="text/javascript" src="/javascripts/jquery.elastic.js"></script>
+
 <script type="text/javascript">
     $(function(){
       $("#input-body").keyup(function(){
         converter = new Showdown.converter();
         $(".output-html").html(converter.makeHtml($("#input-body").val()));
       });
-      
+
       $('#title').keyup(function(){$('.article-title').html($(this).val())});
+
+      $('textarea#input-body').elastic(); 
       
-      $('textarea#input-body').elastic();
-        
+      
+      $('#category-dialog').dialog({ autoOpen: false, modal: true, width:390, minHeight:300 });     
+
+      $("a#open-category").click(function(){$('#category-dialog').dialog('open')});
+      
+      //ajax effect
+      function reloadCategory(){
+        $.get('/category_options',{category:$('select#category').val()}, function(result) {$('select#category').html(result)})
+      }
+
+      $('a#add-category').click(function(){   
+        $.get('/categories/new', function(result){$('a#add-category').before(result)});
+        return false;
+      });       
+      
+      $('form.category-form').live('ajax:loading', function(){$('div.loading').show();})
+                             .live('ajax:success', function(e,result){ 
+                                                     $('div.loading').hide();
+                                                     $(this).replaceWith(result);
+                                                     reloadCategory();
+                                                   })
+                             .live('ajax:failure', function(){$('div.loading').hide();alert('Error Occured!');}) 
     })
 
 </script>
 <% end %>
 
- 
- 
 
-<section id="edit-post">
 
-  <section id="preview">
+
+<div id="edit-post" class="clearfix">
+
+  <div id="preview">
      <h3>Preview: ↓ </h3>
      <article>
-       <h2><a class="article-title" href="#"><%= @post.title || ""%></a></h2>     
+       <h2 class="article-title"><a href="#"><%= @post.title || ""%></a></h2>     
        <ul class="meta">
          <li class="post-time"><time datetime="<%= @post.created_at.strftime("%Y-%m-%d")%>"><%= @post.created_at.strftime("%B %d, %Y")%></time></li>
          <li class="post-tags">tags:</li>
         </ul>        
-       <section class="output-html"><%= @post.body_html%></section>     
+       <div class="output-html"><%= @post.body_html%></div>     
      </article> 
-  </section>
+  </div>
 
 
-  <section id="article-form">
+  <div id="article-input">
     <form action="<%=post_path(@post)%>" method="POST">
       <% if @post.saved?%><input type="hidden" name="_method" value="put" /><% end %>
       <% unless @post.errors.blank? %>     
@@ -48,9 +73,14 @@
         </ul>
       <% end %>  
       <ul>
-        <li><input id="title" name="title" type="text" placeholder="Title" required value="<%= @post.title%>" /></li>      
-        <li><input id="slug" name="slug" type="text" placeholder="Slug: (could auto-generate by title)" value="<%= @post.slug%>" /></li>
-        <li><input id="tags" name="tags" type="text" placeholder="Tags: (separated by comma)" value="<%= (@post.tags || []).join(',')%>" /></li> 
+        <li><label for="title">Title:</label><input id="title" name="title" type="text" placeholder="Title" required value="<%= @post.title%>" /></li>      
+        <li><label for="slug">Slug:</label><input id="slug" name="slug" type="text" placeholder="Slug: (could auto-generate by title)" value="<%= @post.slug%>" /></li>
+        <li><label for="tags">Tags:</label><input id="tags" name="tags" type="text" placeholder="Tags: (separated by comma)" value="<%= (@post.tags || []).join(',')%>" /></li>
+        <li>
+            <label for="category">Category:</label>
+            <select id="category" name="category"><%=category_options(@post.category_id)%></select>
+            <a id="open-category" class="inactive" href="#">Edit Category</a>
+        </li> 
         <li><a href="http://kramdown.rubyforge.org/quickref.html" target='_blank'>Markdown Syntax<a><li>
         <li><textarea id="input-body" name="body" placeholder="Content"><%= @post.body%></textarea></li>     
         <li>
@@ -59,7 +89,13 @@
         </li>
       </ul> 
     </form>
-  </section>
+  </div>
 
+  <div id="category-dialog">      
+      <div class="loading">loading...</div>
+      <%= partial :category, :collection => Category.all%>
+      <a id="add-category" href="#">Add</a>       
+  </div>
 
-</section>
+</div>
+

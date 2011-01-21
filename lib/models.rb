@@ -9,19 +9,20 @@ DataMapper.setup(:default, "appengine://auto")
 DataMapper.repository.adapter.singular_naming_convention!
 
 class Post
-  include DataMapper::Resource
-  property :id,               Serial
+  include DataMapper::AppEngineResource  
   property :author,           Email
   property :last_updated_by,  Email
   property :title,            String
-  property :slug,             String
+  property :slug,             String  
   property :body,             Text
   property :body_html,        Text
   property :published,        Boolean
   property :tags,             List
   property :published_at,     Time
   property :created_at,       Time, :default => lambda { |r, p| Time.now } # must be a Proc 
-  property :updated_at,       Time  
+  property :updated_at,       Time 
+  
+  belongs_to_entity :category, :required => false
   
   validates_presence_of :title, :slug, :body
   validates_uniqueness_of :slug
@@ -29,7 +30,7 @@ class Post
   before :valid? do
     self.slug = self.title.dup if (self.slug.blank?)
     self.slug = self.slug.to_url
-    do_tags   
+    do_tags 
   end
 
   before :save do    
@@ -39,22 +40,22 @@ class Post
       self.last_updated_by = AppEngine::Users.current_user.email
       self.updated_at = Time.now
     end    
-    self.published_at = Time.now if self.published
-    self.body_html = Kramdown::Document.new(self.body).to_html
+    self.published_at = Time.now if (self.published && published_at.blank?)
+    self.body_html = Kramdown::Document.new(self.body).to_html    
   end 
 
  
   def url
-    "/posts/#{created_at.strftime("%Y/%m/%d")}/#{slug}"
+    "/posts/#{published_at.strftime("%Y/%m/%d")}/#{slug}"
   end  
   
   def full_url
     AppSettings.base_url.gsub(/\/$/, '') + url
   end
   
-  def short_body
-    short_body ||= self.body_html.match(/(<p>.+?<\/p>)/m)
-    short_body || self.body_html
+  def summary
+    summary ||= self.body_html.match(/(<p>.+?<\/p>)/m)
+    summary || self.body_html
   end 
   
   
@@ -79,7 +80,15 @@ class Post
 end
 
 
-
+class Category
+  include DataMapper::AppEngineResource
+  property :name,  String
+  property :count, Integer
+  
+  validates_uniqueness_of :name
+  
+  has n, :posts
+end
 
 #class Tag
 #  include DataMapper::Resource

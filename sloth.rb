@@ -42,7 +42,23 @@ helpers do
   def authenticate!
     redirect AppEngine::Users.create_login_url(request.url) unless AppEngine::Users.current_user
     halt(401, "Not authorized") unless AppSettings.admins.include?(AppEngine::Users.current_user.email)
+  end  
+  
+  def partial(template, *args)
+    template_array = template.to_s.split('/')
+    template = template_array[0..-2].join('/') + "/_#{template_array[-1]}"
+    options = args.last.is_a?(Hash) ? args.pop : {}
+    options.merge!(:layout => false)
+    local_as = options[:as] || template_array[-1].to_sym
+    if collection = options.delete(:collection) then
+      collection.inject([]) do |buffer, member|
+        buffer << erb(:"#{template}", options.merge(:layout => false, :locals => {local_as => member}))
+      end.join("\n")
+    else
+      erb(:"#{template}", options)
+    end
   end
+  
   
   def post_path(post)
     if post.saved?
@@ -51,14 +67,33 @@ helpers do
       "/posts"
     end
   end
-  
+
   def tag_links(post)
      bf = []
     (post.tags||[]).each do |tag|
-      bf << "<a href='/tags/#{tag}'>#{tag}</a>"    
+      bf << "<a href='/tags/#{tag}/posts'>#{tag}</a>"    
     end
-    bf.join(", ")
+    bf.join
   end
+
+  def category_options(cstr_or_key = nil)
+    selected_key_str = case cstr_or_key
+                        when String, nil then cstr_or_key
+                        else cstr_or_key.to_s
+                       end
+    result = ""
+    categories = Category.all
+    result << "<option value=''>Uncategory</option>"
+    categories.each do |c|
+      if selected_key_str == c.id.to_s
+        result << "<option value='#{c.id}' selected>#{c.name}</option>"
+      else
+        result << "<option value='#{c.id}'>#{c.name}</option>"
+      end      
+    end
+    result
+  end   
+   
 end
 
 # FILTERS --------------------------------------------------------------------------------------------------
@@ -102,11 +137,18 @@ get '/feed' do
   builder :feed, :locals => {:posts => posts, :xml => Builder::XmlMarkup.new }
 end
 
-get '/tags/:tag' do
+get '/tags/:tag/posts' do
   @posts = Post.all(:order => [:published_at.desc], :published => true, :tags => params[:tag])
-  erb :tagged
+  @post_filter = 'tag'
+  erb :index
 end
 
+get '/categories/:name/posts' do
+  category = Category.first(:name => params[:name])
+  @posts = category.posts.all(:order => [:published_at.desc], :published => true)
+  @post_filter = 'category'
+  erb :index
+end
 
 # only for admin---------------------
 get '/posts/new' do
@@ -117,11 +159,13 @@ end
 
 post '/posts' do
   authenticate!
+
   @post = Post.create :title => params[:title], 
                        :slug => params[:slug], 
                        :tags => params[:tags], 
                        :body => params[:body], 
-                       :published=> (params[:submit] == "post" ? true : false)
+                       :published => (params[:submit] == "post" ? true : false),
+                       :category_id => (params[:category].blank? ? nil :  AppEngine::Datastore::Key.new(params[:category]))
   if @post.saved?
     if @post.published
       redirect @post.url
@@ -133,18 +177,19 @@ post '/posts' do
   end    
 end
 
-get '/posts/:id/edit' do
+get '/posts/:key/edit' do
   authenticate!
-  @post = Post.get(params[:id])
+  @post = Post.get(AppEngine::Datastore::Key.new(params[:key]))
   erb :post
 end
 
-put '/posts/:id' do
+put '/posts/:key' do
   authenticate!
-  @post = Post.get(params[:id])
+  @post = Post.get(AppEngine::Datastore::Key.new(params[:key]))
   if @post.update :title => params[:title], :slug => params[:slug], 
                   :tags => params[:tags], :body => params[:body], 
-                  :published=> (params[:submit] == "post" ? true : false)
+                  :published => (params[:submit] == "post" ? true : false),
+                  :category_id => (params[:category].blank? ? nil :  AppEngine::Datastore::Key.new(params[:category]))
     redirect '/'
   else
     erb :post
@@ -164,3 +209,32 @@ get '/posts/draft' do
   erb :draft
 end
 
+#----------------------------------------
+get '/category_options' do
+  category_options params[:category]
+end
+
+get '/categories/new' do
+  authenticate!
+  category = Category.new
+  partial :category, :locals=>{:category => category}
+end
+
+post '/categories' do
+  authenticate!
+  category = Category.create(:name => params[:name])
+  partial :category, :locals=>{:category => category}
+end
+
+put '/categories/:key' do
+  authenticate!
+  category = Category.get(AppEngine::Datastore::Key.new(params[:key]))
+  category.update :name => params[:name]
+  partial :category, :locals=>{:category => category}
+end
+
+delete '/categories/:key' do
+  authenticate!
+  category = Category.get(AppEngine::Datastore::Key.new(params[:key]))
+  category.destroy
+end

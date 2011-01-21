@@ -1,9 +1,16 @@
-<!-- Indices written at Fri, 14 Jan 2011 03:59:04 UTC -->
+<!-- Indices written at Fri, 21 Jan 2011 03:41:07 UTC -->
 
-<datastore-indexes autoGenerate="false">
+<datastore-indexes autoGenerate="true">
+
+    <!-- Used 7 times in query history -->
+    <datastore-index kind="Post" ancestor="false" source="auto">
+        <property name="published" direction="asc"/>
+        <property name="published_at" direction="desc"/>
+    </datastore-index>
 
     <!-- Used 4 times in query history -->
     <datastore-index kind="Post" ancestor="false" source="auto">
+        <property name="category_id" direction="asc"/>
         <property name="published" direction="asc"/>
         <property name="published_at" direction="desc"/>
     </datastore-index>

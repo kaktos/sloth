@@ -9,7 +9,7 @@
       <script src="/javascripts/modernizr-1.6.min.js"></script>   
       <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
       <script type="text/javascript" src="/javascripts/application.js"></script>
-      <%= yield_content :head %>
+      <% yield_content :head %>
   </head>
 
   <body class="<%= yield_content(:page_type) || "public" %>">
@@ -41,7 +41,20 @@
           <% end %>
           <% if admin? %>      
           <li><a class="admin post-new" href="/posts/new" alt="Post new Article">Post New</a></li> 
-          <li><a class="admin post-new" href="/posts/draft" alt="Drafts">Drafts (<%=Post.draft_count%>)</a></li>    
+          <li><a class="admin draft" href="/posts/draft" alt="Drafts">Drafts (<%=Post.draft_count%>)</a></li>
+          <!--
+          <li class="dropdown">
+             <span class="admin" href="#">Tools</span>
+             <ul class="sub-menu">
+               <li>
+                 <a href="#">Import</a>
+               </li>
+               <li>
+                 <a href="#">Export</a>
+               </li>
+             </ul>                      
+          </li> 
+          -->   
           <% end %>
         </ul>  
       </footer>

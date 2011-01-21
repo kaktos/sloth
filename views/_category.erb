@@ -1,0 +1,20 @@
+<% unless category.errors.blank? %>     
+   <ul class="errors">
+   <% category.errors.each do |e|%>
+     <li><%= e %></li>
+   <% end %>
+   </ul>
+<% end %> 
+
+<% if category && category.saved? %>
+  <form method='put' class='category-form' action="/categories/<%=category.id%>" data-remote data-type='html'>
+    <input type='text' name="name" value="<%=category.name%>">
+    <button type='submit'>Update</button>
+	<a href="/categories/<%=category.id%>" data-remote data-method='delete'>Delete</a>
+  </form>
+<% else %>
+  <form method='post' class='category-form' action="/categories" data-remote data-type='html'>
+    <input type='text' name="name" value="">
+    <button type='submit'>Save</button>
+  </form>
+<% end %>

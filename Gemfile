@@ -12,4 +12,6 @@ gem "builder"
 gem "kramdown"
 gem "stringex"
 
+#gem "sinatra-reloader"
+
 

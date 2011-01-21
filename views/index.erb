@@ -2,34 +2,23 @@
 <% if @posts.blank? %>
   <h1>There isn't any posts yet!</h1>
 <% else %>
-  <% @posts.each do |post| %>
-    <article>
-        <h2><a class="article-title" href="<%= post.url%>"><%= post.title %></a></h2>
-        
-        <ul class="meta">
-          <li class="post-time"><time datetime="<%= post.created_at.strftime("%Y-%m-%d")%>"><%= post.created_at.strftime("%B %d, %Y")%></time></li>
-          <li class="post-tags">Tags: <%= tag_links(post) %></li>
-          <% unless AppSettings.disqus_shortname.blank? %>
-          <li class="post-comments"><a href="<%= post.url %>#disqus_thread" data-disqus-identifier="<%=post.id%>">Comments</a></li>
-          <% end %>
-          <% if admin? %>          
-          <li>
-            <a class="admin edit-post" href="/posts/<%=post.id%>/edit">Edit</a>
-            <a class="admin del-post" href="/posts/<%=post.id%>" data-method="delete" data-confirm="are you sure?">Delete</a>
-          </li>  
-          <% end %>                      
-        </ul>        
-        <section class="output-html">
-          <%= post.short_body %>          
-          <a href="<%= post.url %>">Continue reading &raquo;</a>          
-        </section>   
-    </article>
+  <%if @post_filter%>
+    <% if 'tag' == @post_filter %>
+      <h1 class="feature-title">Posts Tagged With: <mark><%=params[:tag]%></mark></h1>
+    <% elsif 'category' == @post_filter %>
+      <h1 class="feature-title">Posts Categoried By: <mark><%=params[:name]%></mark></h1>  
+    <% end %>
   <% end %>
   
+  <%= partial :post_summary, :collection => @posts, :as =>:post %>
+  
+  
+  <%unless @post_filter%>
   <ul class="pagination clearfix">
     <li class="left"><% if @has_next_page%><a href="/?page=<%=(params[:page]||1).to_i+1%>"> &laquo; Older Posts</a><%end%></li>
     <li class="right"><% if @has_previous_page%><a href="/?page=<%=(params[:page]||1).to_i-1%>">Newer Posts &raquo;</a><%end%></li>
   </ul>
+  <% end %>
 <% end %>
 
 
