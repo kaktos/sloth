@@ -21,10 +21,10 @@ Modern browsers are required to support the all **html5** and
 make sure you have ruby **MRI 1.8.7** installed in your system.  
 install the all-in-one SDK for jruby on GAE  
 
-	gem install google-appengine
+	gem install google-appengine -v 0.0.19
 
 
-install bundled gems:  
+install bundled gems(make sure you have gem version below 1.4!!!!!):  
 
 	appcfg.rb bundle .	
 
