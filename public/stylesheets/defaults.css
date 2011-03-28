@@ -61,7 +61,7 @@ body.private {
 
 body.public div#wrapper {
   margin: 10px auto 0;
-  width: 700px;
+  width: 900px;
   background-color: rgb(255, 255, 255);  
   border-radius: 4px;
   border: 10px solid rgba(0, 0, 0, .3);
@@ -212,14 +212,27 @@ article {
     article .output-html code, 
     article .output-html tt {font:1em 'andale mono', 'lucida console', monospace;line-height:1.5; display:block;}
     
-    article .output-html code {background-color:#f8f8ff; display:block; padding:2px 2px 4px 26px; border:1px solid #dedede; line-height:1.67em;}
-    article .output-html pre {margin:1.5em 0;white-space:pre;}    
+    article .output-html code {
+      background-color:#f8f8ff; 
+      display:block; 
+      padding:2px 2px 4px 12px;
+      border:1px solid #dedede; 
+      line-height:1.67em;
+      white-space: pre;          /* CSS 2.0 */      
+    }
+
+    article .output-html pre {
+      margin:1.5em 0;
+    }    
     
-    article .output-html ul, article .output-html ol{
+    article .output-html ul{
       list-style-type: disc;
       margin: 0 0 1.52em 20px;
     }
-    
+    article .output-html ol{
+      margin: 0 0 1.52em 20px;
+    }
+        
     article .output-html blockquote {
       border-left:5px solid #ddd;
       color:#555;
@@ -278,6 +291,9 @@ article {
     -moz-border-radius: 5px;
     border-radius: 5px; 
   }
+  #preview article .output-html code {
+      overflow:auto;
+  }  
   
   #article-input ul.errors { color: red }
   #article-input ul li{list-style: none;margin: 0; overflow:hidden;} 
@@ -290,7 +306,7 @@ article {
   #article-input button:active, button:focus { background: -webkit-gradient(linear,0% 100%,0% 0%,from(rgba(255,255,255,1)),to(rgba(185,185,185,1))); background: -moz-linear-gradient(bottom,rgba(255,255,255,1),rgba(185,185,185,1)); }
   #article-input button:disabled { color: rgba(0,0,0,0.4); text-shadow: 1px 1px 0px rgba(255,255,255,0.5); background: rgba(220,220,220,1); }
   
-  #article-input textarea {width: 95%;height: 300px}
+  #article-input textarea {width: 95%;height: 300px;overflow:scroll;}
   #article-input select {height: 20px; width:200px; margin: 0 5px 5px 0; float:left}
   
   a#open-category {
