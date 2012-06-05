@@ -1,0 +1,6 @@
+
+*.pyc
+.project
+*sublime*
+
+app/config.py

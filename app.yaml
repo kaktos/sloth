@@ -1,0 +1,30 @@
+application: slothapp
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: no
+
+handlers:
+
+- url : /favicon.ico
+  static_files: public/favicon.ico
+  upload: public/favicon.ico
+  
+- url: /images
+  static_dir: public/images
+  
+- url: /stylesheets
+  static_dir: public/stylesheets
+  
+- url: /javascripts
+  static_dir: public/javascripts    
+  
+
+- url: /.*
+  script: main.py
+  
+libraries:
+- name: jinja2
+  version: latest  
+
+     
