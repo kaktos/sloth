@@ -96,7 +96,7 @@ def post_create():
     p = Post()
     p.title = request.params.title
     p.slug = slugify(p.title)
-    p.do_tags(request.params.tags)
+    #p.do_tags(request.params.tags)
     p.do_category(request.params.category)
     p.body = request.params.body
     p.body_html = markdown.markdown(p.body)
@@ -138,11 +138,11 @@ def post_edit(id):
 @put('/posts/<id>', name = "post_path")
 @user_required
 def post_update(id):
-    logging.info("category param is %s", request.params['category'])
+    #logging.info("category param is %s", request.params['category'])
     p = Post.get_by_id(long(id))    
     p.title = request.params.title
     p.slug = slugify(p.title)
-    p.do_tags(request.params.tags)
+    #p.do_tags(request.params.tags)
     p.do_category(request.params.category)
     p.body = request.params.body
     p.body_html = markdown.markdown(p.body)
@@ -165,8 +165,9 @@ def categories():
 
 @get('/posts/category/<category_name>', name = "category_posts_path")
 def categorified_post(category_name):
-    category = Category.all().filter('name=', category_name).get()
-    return template('post_list.html', posts=category.posts) 
+    #logging.info("category name is %s", category_name)
+    c = Category.all().filter("name =", category_name).get()
+    return template('post_by.html', posts=c.posts) 
     
     
     

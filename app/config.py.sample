@@ -7,4 +7,3 @@ disqus_shortname = "demo"
 title = "Hello World"
 subtitle = "Bonjour Monde"
 
-bottom_links = {"github" : "https://github.com/", "twitter" : "https://twitter.com/"}

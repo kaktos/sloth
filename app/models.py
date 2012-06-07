@@ -27,8 +27,10 @@ class Post(db.Model):
     created_at      = db.DateTimeProperty(auto_now_add=True)
     updated_at      = db.DateTimeProperty(auto_now=True)
     
-    tags            = db.StringListProperty(default=[]) 
+    # tags            = db.StringListProperty(default=[]) 
     category        = db.ReferenceProperty(Category, collection_name='posts')
+
+    ptag_rexp = re.compile("<p>.+?<\/p>", re.DOTALL)
      
     @property
     def url(self):
@@ -36,18 +38,18 @@ class Post(db.Model):
         
     @property    
     def summary(self):        
-        summary = re.match(r"<p>.+?<\/p>", self.body_html)
+        summary = Post.ptag_rexp.match(self.body_html)
         if summary == None:
             return self.body_html
         else:
-            return summary.group()        
+            return summary.group(0)        
 
-    def do_tags(self, raw_tags):
-        if raw_tags:            
-            self.tags = [re.sub(r'\s+','-',t.strip()) for t in raw_tags.split(",")]
-            for tag_name in self.tags:
-                tag = Tag(key_name = tag_name) 
-                tag.put()  
+    # def do_tags(self, raw_tags):
+    #     if raw_tags:            
+    #         self.tags = [re.sub(r'\s+','-',t.strip()) for t in raw_tags.split(",")]
+    #         for tag_name in self.tags:
+    #             tag = Tag(key_name = tag_name) 
+    #             tag.put()  
                 
     def do_category(self, cat_name):
         if cat_name:
@@ -60,9 +62,9 @@ class Post(db.Model):
             self.category = None    
 
 
-class Tag(db.Model):
-    created_at      = db.DateTimeProperty(auto_now_add=True)
+# class Tag(db.Model):
+#     created_at      = db.DateTimeProperty(auto_now_add=True)
 
-    @property
-    def posts(self):
-        return Post.gql("WHERE tags = :1", self.key().name())
+#     @property
+#     def posts(self):
+#         return Post.gql("WHERE tags = :1", self.key().name())

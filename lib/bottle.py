@@ -16,7 +16,7 @@ License: MIT (see LICENSE.txt for details)
 from __future__ import with_statement
 
 __author__ = 'Marcel Hellkamp'
-__version__ = '0.10.7'
+__version__ = '0.10.9'
 __license__ = 'MIT'
 
 # The gevent server adapter needs to patch some modules before they are imported
@@ -580,7 +580,7 @@ class Bottle(object):
                     for name, value in header: rs.add_header(name, value)
                     return rs.body.append
                 rs.body = itertools.chain(rs.body, app(request.environ, start_response))
-                return HTTPResponse(rs.body, rs.status, rs.headers)
+                return HTTPResponse(rs.body, rs.status_code, rs.headers)
             finally:
                 request.path_shift(-path_depth)
 
@@ -1264,7 +1264,7 @@ class BaseResponse(object):
         self._status_line = status or ('%d Unknown' % code)
 
     def _get_status(self):
-        depr('BaseReuqest.status will change to return a string in 0.11. Use'\
+        depr('BaseRequest.status will change to return a string in 0.11. Use'\
              ' status_line and status_code to make sure.') #0.10
         return self._status_code
 
@@ -2694,11 +2694,12 @@ class SimpleTemplate(BaseTemplate):
             lineno += 1
             line = line if isinstance(line, unicode)\
                         else unicode(line, encoding=self.encoding)
+            sline = line.lstrip()
             if lineno <= 2:
                 m = re.search(r"%.*coding[:=]\s*([-\w\.]+)", line)
                 if m: self.encoding = m.group(1)
                 if m: line = line.replace('coding','coding (removed)')
-            if line.strip()[:2].count('%') == 1:
+            if sline and sline[0] == '%' and sline[:2] != '%%':
                 line = line.split('%',1)[1].lstrip() # Full line following the %
                 cline = self.split_comment(line).strip()
                 cmd = re.split(r'[^a-zA-Z0-9_]', cline)[0]
