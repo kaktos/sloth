@@ -26,7 +26,7 @@
         {% if not post.category %}
         Uncategoried
         {% else %}
-        <a href="{{url_for('category_posts_path', category_name = post.category.name)}}">{{ post.category.name }}</a>
+        <a href="{{url_for('category_posts_path', category_id = post.category.key().id())}}">{{ post.category.name }}</a>
         {% endif %}
         </li>
        <li><i class="icon-comment"></i>&nbsp;<a href="{{ post.url }}#disqus_thread" data-disqus-identifier="{{ post.key().id()|string }}">Comments</a></li>

@@ -171,10 +171,10 @@ def categories():
     categories = Category.all().fetch(limit=None)
     return [category.name for category in categories]
 
-@get('/posts/category/<category_name>', name = "category_posts_path")
-def categorified_post(category_name):
+@get('/posts/category/<category_id>', name = "category_posts_path")
+def categorified_post(category_id):
     #logging.info("category name is %s", category_name)
-    c = Category.all().filter("name =", category_name).get()
+    c = Category.get_by_id(long(category_id)) 
     return template('post_by.html', posts=c.posts) 
     
     
