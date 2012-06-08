@@ -22,8 +22,14 @@
       {{ post.summary|safe }}
     </div>
        
-    <a href="{{ post.url }}">Continue reading &raquo;</a>      
-    
+    <a href="{{ post.url }}">Continue reading &raquo;</a>
+
+    {% if is_admin() %}
+    <ul class="post-actions">
+      <li><i class="icon-edit"></i>&nbsp;<a class="" href="/posts/{{ post.key().id() }}/edit">Edit</a></li>
+      <li><i class="icon-remove"></i>&nbsp;<a class="" href="/posts/{{ post.key().id() }}" data-method="delete" data-confirm="are you sure?">Delete</a></li>
+    </ul>
+    {% endif %}    
   </article>
  {% endfor %}
   

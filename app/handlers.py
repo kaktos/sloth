@@ -103,9 +103,10 @@ def post_create():
     if request.params['submit'] == 'post':
         p.published = True
         p.published_at = datetime.now()
+        p.author = users.get_current_user().email()
     else:
         p.published = False
-        
+      
   
     p.put()
     redirect("/")
@@ -146,6 +147,7 @@ def post_update(id):
     p.do_category(request.params.category)
     p.body = request.params.body
     p.body_html = markdown.markdown(p.body)
+    p.last_updated_by = users.get_current_user().email()
     if request.params['submit'] == 'post':
         p.published = True
         p.published_at = datetime.now()
@@ -157,10 +159,16 @@ def post_update(id):
     redirect("/")         
     
 
+@get('/posts/draft', name = "draft_posts_path")
+@user_required
+def draft_posts():
+    posts = Post.all().filter('published =', False).order("-updated_at").fetch(limit=None)
+    return template('post_by.html', posts=posts) 
+
 #--------------------------------------------------------------------------------------------------
 @get('/categories.json')
 def categories():
-    categories = Category.all().fetch(100)
+    categories = Category.all().fetch(limit=None)
     return [category.name for category in categories]
 
 @get('/posts/category/<category_name>', name = "category_posts_path")

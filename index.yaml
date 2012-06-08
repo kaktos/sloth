@@ -15,3 +15,9 @@ indexes:
   - name: published
   - name: published_at
     direction: desc
+
+- kind: Post
+  properties:
+  - name: published
+  - name: updated_at
+    direction: desc

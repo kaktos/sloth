@@ -1,5 +1,5 @@
 /*------------------------------------*\
-  GLOBAL
+  sloth customized css
 \*------------------------------------*/
 body {
   font:normal 12px Tahoma,Microsoft YaHei,Verdana,Arial,Helvetica,sans-serif;
@@ -15,58 +15,61 @@ body {
 /* --------- header --------- */
 header#main-header {
   font: 75%/1.5 Georgia, 'Times New Roman', Serif;
-  margin-top: 25px;
   border-bottom: 1px solid #dcdcdc;
 }
-  header#main-header hgroup {
-    float: left;
-    text-shadow: rgba(0, 0, 0, 0.2) 0 1px 0;
-  }
-  header#main-header hgroup h1 {
-    font-size: 4em;
-  }
-  header#main-header nav {
-    float: right; 
-  }
-  header#main-header h1 {
-    margin-bottom: 5px;
-  } 
-  header#main-header h1 a{
-    color: #333;
-  }
-  header#main-header h2 {
-    color: #777; 
-    font-size: 1.2em;
-  }
+header#main-header hgroup {
+  text-shadow: rgba(0, 0, 0, 0.2) 0 1px 0;
+}
+header#main-header hgroup h1 {
+  font-size: 4em;
+  margin-bottom: 5px;
+}
 
-  ul#nav-menu {
-    list-style: none;
-  }
-    ul#nav-menu li {
-      display: inline-block;
-      margin: 0px 5px 0px 0;
-      opacity:0.2; 
-      -webkit-transition: opacity .3s linear;
-      -moz-transition: opacity .3s linear;
-      -o-transition: opacity .3s linear;
-      transition: opacity .3s linear;     
-    }
-    ul#nav-menu li:hover {
-      opacity: 1;
-    }
-    
-    ul#nav-menu li a.home {
-      display: block;
-      background:url('../images/home_16x16.png') no-repeat scroll left center;
-      width: 18px;
-      height: 18px;  
-    }
-    ul#nav-menu li a.feed {
-      display: block;
-      background:url('../images/rss_16x16.png') no-repeat scroll left center;
-      width: 18px;
-      height: 18px;  
-    }
+header#main-header h1 a {
+  color: #333;
+}
+header#main-header hgroup h2 {
+  color: #777; 
+  font-size: 1.2em;
+}
+
+nav#top-nav {
+  text-align:right;
+  margin-top:20px;
+  margin-bottom: -20px;
+}
+ 
+
+ul#nav-menu {
+  list-style: none;
+  margin:0;
+}
+ul#nav-menu li {
+  display: inline-block;
+  margin: 0px 5px 0px 0;
+  opacity:0.2; 
+  -webkit-transition: opacity .3s linear;
+  -moz-transition: opacity .3s linear;
+  -o-transition: opacity .3s linear;
+  transition: opacity .3s linear;     
+}
+ul#nav-menu li:hover {
+  opacity: 1;
+}
+
+ul#nav-menu li a.home {
+  display: block;
+  background:url('../images/home_16x16.png') no-repeat scroll left center;
+  width: 18px;
+  height: 18px;  
+}
+ul#nav-menu li a.feed {
+  display: block;
+  background:url('../images/rss_16x16.png') no-repeat scroll left center;
+  width: 18px;
+  height: 18px;  
+}
+
 
 /* --------- footer --------- */
 footer {
@@ -78,10 +81,14 @@ footer {
   margin-bottom: 20px;
 }
    
+
 /* --------- article display --------- */
 article {
-  margin-bottom: 20px;
-  padding: 10px 30px;
+  padding: 10px 25px 5px;
+  position: relative;
+}
+article.post-sum-item:hover {
+  background-color: #eee;
 }
 article ul.meta {
   color: #999;
@@ -97,9 +104,32 @@ article ul.meta li {
   margin: 0 5px 0 0;
 }
 
-    
+ul.post-actions {
+  position: absolute;
+  right:10px;
+  top:10px;
+  list-style:none;
+  margin: 0;
+  padding:5px 0;
+}
+ul.post-actions li{
+  display: inline;
+}
+article ul.post-actions li {
+  visibility: hidden;
+}
+article:hover ul.post-actions li{
+  visibility: visible;
+}
+
+#disqus_thread {
+  padding: 10px 25px 5px;
+  border-top: 1px solid #eee;
+  margin-top:30px;
+}
+
+
 /* --------- post edit --------- */
- 
 #editor-wrapper {
   margin:0 0 20px;
   min-height: 320px;

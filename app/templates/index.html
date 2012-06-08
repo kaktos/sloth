@@ -15,7 +15,7 @@
   {% else %}
    {% for post in posts %}
   
-    <article>
+    <article class="post-sum-item">
       <h2 class="article-title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
   
       <ul class="meta">
@@ -35,10 +35,17 @@
       <div class="output-html">
         {{ post.summary|safe }}
       </div>
-         
-      <a href="{{ post.url }}">Continue reading &raquo;</a>      
-      
+
+      <a href="{{ post.url }}">Continue reading &raquo;</a>
+
+      {% if is_admin() %}
+      <ul class="post-actions">
+        <li><i class="icon-edit"></i>&nbsp;<a class="" href="/posts/{{ post.key().id() }}/edit">Edit</a></li>
+        <li><i class="icon-remove"></i>&nbsp;<a class="" href="/posts/{{ post.key().id() }}" data-method="delete" data-confirm="are you sure?">Delete</a></li>
+      </ul>
+      {% endif %}    
     </article>
+
    {% endfor %}
     
     <ul class="pager">

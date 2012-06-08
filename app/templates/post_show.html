@@ -15,7 +15,7 @@
 
 {% block content %}
 <div class="container board"> 
-{% if post %}
+
   <article>
   	<h2 class="article-title"><a href="{{post.url}}">{{ post.title }}</a></h2>
   
@@ -29,48 +29,44 @@
         <a href="{{url_for('category_posts_path', category_name = post.category.name)}}">{{ post.category.name }}</a>
         {% endif %}
         </li>
-  	  
        <li><i class="icon-comment"></i>&nbsp;<a href="{{ post.url }}#disqus_thread" data-disqus-identifier="{{ post.key().id()|string }}">Comments</a></li>
-   	 
-  	  {% if is_admin() %}          
-  	  <li>
-  		<div class="btn-group">
-  		  <a class="btn btn-inverse btn-mini" href="/posts/{{ post.key().id() }}/edit">Edit</a>
-  		  <a class="btn btn-inverse btn-mini" href="/posts/{{ post.key().id() }}" data-method="delete" data-confirm="are you sure?">Delete</a>
-          </div>
-  	  </li>  
-  	  {% endif %}                      
   	</ul>        
   	<div class="output-html">
   	  {{ post.body_html|safe }}
   	</div>
-  
+    {% if is_admin() %}
+    <ul class="post-actions">
+      <li><i class="icon-edit"></i>&nbsp;<a class="" href="/posts/{{ post.key().id() }}/edit">Edit</a></li>
+      <li><i class="icon-remove"></i>&nbsp;<a class="" href="/posts/{{ post.key().id() }}" data-method="delete" data-confirm="are you sure?">Delete</a></li>
+    </ul>
+    {% endif %}      
+  </article>
   
   	 
-  	<div id="disqus_thread"></div>
+  <div id="disqus_thread"></div>
       
-  	<script type="text/javascript">
-  		
-  		var disqus_shortname = '{{ app_config.disqus_shortname }}'; 
-  		var disqus_identifier = '{{ post.key().id()|string }}';
-  		{% if app_config.DEV_MODE %}var disqus_developer = 1; {% endif %}
+  <script type="text/javascript">
+  	
+  	var disqus_shortname = '{{ app_config.disqus_shortname }}'; 
+  	var disqus_identifier = '{{ post.key().id()|string }}';
+  	{% if app_config.DEV_MODE %}var disqus_developer = 1; {% endif %}
   
-  		/* * * DON'T EDIT BELOW THIS LINE * * */
-  		(function() {
-  			var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-  			dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-  			(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  		})();
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function() {
+  		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  		dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+  		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  	})();
   
-  		(function () {
-  			var s = document.createElement('script'); s.async = true;
-  			s.type = 'text/javascript';
-  			s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
-  			(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-  		})();
-  	</script>
+  	(function () {
+  		var s = document.createElement('script'); s.async = true;
+  		s.type = 'text/javascript';
+  		s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+  		(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  	})();
+  </script>
    
-  </article>
-{% endif %}
+ 
+
 </div>
 {% endblock content%}
