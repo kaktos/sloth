@@ -26,10 +26,10 @@
 
     {% if is_admin() %}
     <ul class="post-actions">
-      <li><i class="icon-edit"></i>&nbsp;<a class="" href="/posts/{{ post.key().id() }}/edit">Edit</a></li>
-      <li><i class="icon-remove"></i>&nbsp;<a class="" href="/posts/{{ post.key().id() }}" data-method="delete" data-confirm="are you sure?">Delete</a></li>
+      <li><i class="icon-edit"></i>&nbsp;<a href="{{url_for('post_edit', id=post.key().id())}}">Edit</a></li>
+      <li><i class="icon-remove"></i>&nbsp;<a href="{{url_for('post_destroy', id=post.key().id())}}" data-method="delete" data-confirm="are you sure?">Delete</a></li>
     </ul>
-    {% endif %}    
+    {% endif %}     
   </article>
  {% endfor %}
   

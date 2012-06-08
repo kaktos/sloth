@@ -6,7 +6,7 @@ Modern browsers are required to support the all **html5** and
 
 ##Features
 *  <del> Ruby powered(Sinatra, Datamapper), thanks the [JRuby on Google App Engine](http://code.google.com/p/appengine-jruby/);</del>
-* Python powered now([bottle](http://bottlepy.org))
+* Python powered now([Flask](http://flask.pocoo.org))
 * Based On twitter's [bootstrap](http://twitter.github.com/bootstrap/index.html)
 * CSS3 and HTML5 goodness;
 * Support Markdown markup; 

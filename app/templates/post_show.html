@@ -26,7 +26,7 @@
         {% if not post.category %}
         Uncategoried
         {% else %}
-        <a href="{{url_for('category_posts_path', category_id = post.category.key().id())}}">{{ post.category.name }}</a>
+        <a href="{{url_for('categorified_post', category_id = post.category.key().id())}}">{{ post.category.name }}</a>
         {% endif %}
         </li>
        <li><i class="icon-comment"></i>&nbsp;<a href="{{ post.url }}#disqus_thread" data-disqus-identifier="{{ post.key().id()|string }}">Comments</a></li>
@@ -36,8 +36,8 @@
   	</div>
     {% if is_admin() %}
     <ul class="post-actions">
-      <li><i class="icon-edit"></i>&nbsp;<a class="" href="/posts/{{ post.key().id() }}/edit">Edit</a></li>
-      <li><i class="icon-remove"></i>&nbsp;<a class="" href="/posts/{{ post.key().id() }}" data-method="delete" data-confirm="are you sure?">Delete</a></li>
+      <li><i class="icon-edit"></i>&nbsp;<a href="{{url_for('post_edit', id=post.key().id())}}">Edit</a></li>
+      <li><i class="icon-remove"></i>&nbsp;<a href="{{url_for('post_destroy', id=post.key().id())}}" data-method="delete" data-confirm="are you sure?">Delete</a></li>
     </ul>
     {% endif %}      
   </article>

@@ -7,9 +7,6 @@
 
 {% block head %}
 {{ super() }}
-<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/themes/base/jquery-ui.css">
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/jquery-ui.min.js" ></script>
-
 <script type="text/javascript" src="/javascripts/showdown.js"></script>
 <script type="text/javascript" src="/javascripts/jquery.elastic.js"></script>
 
@@ -25,10 +22,7 @@
       $('textarea#input-body').elastic(); 
 
 
-      $( "#category" ).autocomplete({
-        source: "/categories.json",
-        minLength: 2
-      });
+      $( "#category" ).typeahead({source: ['{{ categories|join("','", attribute='name')|safe }}']});
     })
 
 </script>
@@ -44,7 +38,7 @@
   <div class="row-fluid" style="margin-top:10px;">
     <ul class="breadcrumb">
       <li>
-        <a href="/">Home</a> <span class="divider">/</span>
+        <a href="{{url_for('index')}}">Home</a> <span class="divider">/</span>
       </li>
       <li class="active">Post</li>
     </ul>
@@ -55,14 +49,14 @@
     <div id="preview" class="span6">
        <article>
          <h2 class="article-title"><a href="#">{{ post.title or "" }}</a></h2>     
-         <div class="output-html">{{ post.body_html or ""|safe }}</div>     
+         <div class="output-html">{{ post.body_html|safe }}</div>     
        </article> 
     </div>
   
   
     <div class="span6">
       <div id="editor"> 
-        <form action={% if post.is_saved() %} "{{ url_for('post_path',id=post.key().id()) }}" {% else %} "{{ url_for('posts_path') }}" {% endif %} method="POST" class="well">
+        <form action={% if post.is_saved() %} "{{ url_for('post_update',id=post.key().id()) }}" {% else %} "{{ url_for('post_create') }}" {% endif %} method="POST" class="well">
           {% if post.is_saved() %} <input type="hidden" name="_method" value="put" /> {% endif %}
           <input id="title" name="title" type="text" placeholder="Title" required value="{{ post.title or "" }}" /></li> 
           <input id="slug" name="slug" type="text" placeholder="Slug: (could auto-generate by title)" value="{{ post.slug or ""}}" /></li>
