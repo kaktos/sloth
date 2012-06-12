@@ -6,7 +6,7 @@ model class
 from google.appengine.ext import db
 from datetime import datetime
 import re
-
+import logging
 
 
 
@@ -30,7 +30,7 @@ class Post(db.Model):
     # tags            = db.StringListProperty(default=[]) 
     category        = db.ReferenceProperty(Category, collection_name='posts')
 
-    ptag_rexp = re.compile("<p>.+?<\/p>", re.DOTALL)
+    #ptag_regex = re.compile("<p>.*?<\/p>", re.DOTALL)
      
     @property
     def url(self):
@@ -38,11 +38,11 @@ class Post(db.Model):
         
     @property    
     def summary(self):        
-        summary = Post.ptag_rexp.match(self.body_html)
-        if summary == None:
+        pos = self.body_html.find("</p>")
+        if pos == -1:
             return self.body_html
         else:
-            return summary.group(0)        
+            return self.body_html[:pos+4]
 
     # def do_tags(self, raw_tags):
     #     if raw_tags:            
