@@ -9,8 +9,8 @@ package_dir_path = os.path.join(os.path.dirname(__file__), package_dir)
 sys.path.insert(0, package_dir_path)
 
 import bottle
-from app import handlers, config
 from middlewares import MethodRewriteMiddleware
+from app import handlers, config
 
 app = bottle.default_app()
 myapp = MethodRewriteMiddleware(app)

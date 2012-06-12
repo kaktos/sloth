@@ -1,31 +1,33 @@
 # -*- coding: utf-8 -*-
 
-from bottle import route, redirect, request, url, abort, template as base_template, get, post, put, delete, install
-from models import *
-import config, bottleext
-import functools
-import unidecode
-import markdown
+from functools import wraps, partial
 from datetime import datetime
-from paging import PagedQuery
 import logging
 
 from google.appengine.api import users
+
+from bottle import route, redirect, request, url, abort, template as base_template, get, post, put, delete, install
+import bottleext
+import unidecode
+import markdown
+from models import *
+import config
+from paging import PagedQuery
 
 
 ###############################################################################
 #                      decorator and view helpers                             #
 ###############################################################################
-def user_required(handler):
+def login_required(func):
     """
     Decorator for checking if there's a admin user
     """
-
-    def check_login(*args, **kwargs):    	
+    @wraps(func)
+    def check_login(*args, **kwargs):       
         if not users.get_current_user() or not users.is_current_user_admin():
             abort(403)
         else:
-            return handler(*args, **kwargs)
+            return func(*args, **kwargs)
 
     return check_login
 
@@ -45,7 +47,7 @@ def slugify(str):
 #                     init                                                    #
 ###############################################################################
 settings = dict(globals = {"app_config":config, "current_user" : current_user, "is_admin" : is_admin, "url_for" : url})
-template = functools.partial(base_template, 
+template = partial(base_template, 
                              template_adapter=bottleext.MyJinja2Template, 
                              template_settings=settings,
                              template_lookup=["./app/templates"]) 
@@ -84,14 +86,14 @@ def index():
     
 
 @get('/posts/new', name="new_post_path")
-@user_required
+@login_required
 def post_new():
-    context = {'post': Post(), 'categories' : Category.all()}
+    context = {'post': Post(), 'categories' : Category.all().fetch(limit=None)}
     return template('post_edit.html', **context)
 
     
 @post('/posts', name = "posts_path")
-@user_required
+@login_required
 def post_create():
     p = Post()
     p.title = request.params.title
@@ -120,7 +122,7 @@ def post_show(year, month, day, slug):
  
 
 @delete('/posts/<id>', name = "delete_post_path")   
-@user_required  
+@login_required  
 def post_destroy(id):
     p = Post.get_by_id(long(id))
     if p: p.delete()  
@@ -129,15 +131,15 @@ def post_destroy(id):
 
 
 @get('/posts/<id>/edit', name = "edit_post_path")
-@user_required
+@login_required
 def post_edit(id):
     post = Post.get_by_id(long(id))    
-    context = {'post': post}
+    context = {'post': post, 'categories' : Category.all().fetch(limit=None)}
     return template('post_edit.html', **context)  
 
 
 @put('/posts/<id>', name = "post_path")
-@user_required
+@login_required
 def post_update(id):
     #logging.info("category param is %s", request.params['category'])
     p = Post.get_by_id(long(id))    
@@ -160,16 +162,16 @@ def post_update(id):
     
 
 @get('/posts/draft', name = "draft_posts_path")
-@user_required
+@login_required
 def draft_posts():
     posts = Post.all().filter('published =', False).order("-updated_at").fetch(limit=None)
     return template('post_by.html', posts=posts) 
 
 #--------------------------------------------------------------------------------------------------
-@get('/categories.json')
-def categories():
-    categories = Category.all().fetch(limit=None)
-    return [category.name for category in categories]
+# @get('/categories.json')
+# def categories():
+#     categories = Category.all().fetch(limit=None)
+#     return [category.name for category in categories]
 
 @get('/posts/category/<category_id>', name = "category_posts_path")
 def categorified_post(category_id):

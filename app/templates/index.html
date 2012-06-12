@@ -48,7 +48,7 @@
 
    {% endfor %}
     
-    <ul class="pager">
+    <ul class="pager" style="margin-top:10px">
       <li>{% if has_next%}<a href="/?page={{page + 1}}"> &laquo; Older Posts</a>{%endif%}</li>
       <li>{% if has_prev%}<a href="/?page={{page - 1}}">Newer Posts &raquo;</a>{%endif%}</li>
     </ul>

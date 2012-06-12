@@ -7,8 +7,8 @@
 
 {% block head %}
 {{ super() }}
-<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/themes/base/jquery-ui.css">
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/jquery-ui.min.js" ></script>
+<!-- <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/themes/base/jquery-ui.css">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/jquery-ui.min.js" ></script> -->
 
 <script type="text/javascript" src="/javascripts/showdown.js"></script>
 <script type="text/javascript" src="/javascripts/jquery.elastic.js"></script>
@@ -25,10 +25,7 @@
       $('textarea#input-body').elastic(); 
 
 
-      $( "#category" ).autocomplete({
-        source: "/categories.json",
-        minLength: 2
-      });
+      $( "#category" ).typeahead({source: ['{{ categories|join("','", attribute='name')|safe }}']});
     })
 
 </script>
